@@ -85,13 +85,13 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 lg:px-16 lg:py-20"
+      className="relative overflow-hidden py-14 sm:py-16 lg:py-20"
     >
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute right-0 top-1/2 h-[260px] w-[260px] -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.04] blur-3xl sm:h-[340px] sm:w-[340px]" />
+      <div className="pointer-events-none absolute right-0 top-1/2 h-[240px] w-[240px] -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.04] blur-3xl sm:h-[320px] sm:w-[320px]" />
 
       <div className="section-container relative z-10 text-[#F2D6A0]">
-        {/* Section header */}
+        {/* ── Section header ── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -106,16 +106,26 @@ export default function Services() {
             </span>
           </div>
 
-          <h2 className="mx-auto max-w-2xl text-[26px] font-semibold leading-tight text-white sm:text-3xl md:mx-0 md:text-4xl lg:text-[42px]">
+          <h2
+            className="
+            mx-auto font-semibold leading-tight text-white
+            text-[24px]
+            sm:text-[30px]
+            md:mx-0 md:text-[34px]
+            lg:text-[38px]
+            xl:text-[42px]
+          "
+          >
             Astrology services for every
-            <br className="hidden sm:block" /> important life decision
+            <br className="hidden sm:block" />
+            important life decision
           </h2>
         </motion.div>
 
-        {/* Services grid:
-            mobile  → 1 col
-            sm      → 2 col
-            lg      → 3 col (not xl — fills desktop at 1024px+)
+        {/* ── Services grid ──
+            320–639px  → 1 col
+            640–1023px → 2 col
+            1024px+    → 3 col
         */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
           {services.map((service, i) => (
@@ -123,8 +133,8 @@ export default function Services() {
               key={service.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.24) }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.2) }}
               className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#171124]/80 shadow-[0_16px_40px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/35 hover:shadow-[0_20px_60px_rgba(212,175,55,0.10)]"
             >
               {/* Image */}
@@ -143,7 +153,7 @@ export default function Services() {
 
               {/* Text */}
               <div className="flex flex-1 flex-col px-4 pb-5 pt-4 sm:px-5">
-                <h3 className="mb-2 text-base font-semibold leading-snug text-white sm:text-lg">
+                <h3 className="mb-2 text-[15px] font-semibold leading-snug text-white sm:text-base lg:text-[15px] xl:text-base">
                   {service.title}
                 </h3>
                 <p className="text-[13px] leading-6 text-[#F2D6A0]/65 sm:text-sm">
@@ -154,24 +164,27 @@ export default function Services() {
           ))}
         </div>
 
-        {/* Trust bar */}
+        {/* ── Trust bar ──
+            mobile  → 2 col
+            lg+     → 4 col
+        */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-4 backdrop-blur-md sm:mt-10 sm:px-6 sm:py-5"
+          className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] px-3 py-4 backdrop-blur-md sm:mt-10 sm:px-5 sm:py-5"
         >
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
             {trustItems.map((item) => {
               const Icon = item.icon;
               return (
                 <div
                   key={item.text}
-                  className="flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 sm:gap-3 sm:px-4"
+                  className="flex items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 sm:gap-3 sm:px-4"
                 >
-                  <Icon size={14} className="shrink-0 text-[#D4AF37]" />
-                  <span className="text-[11px] text-[#F2D6A0]/65 sm:text-xs">
+                  <Icon size={13} className="shrink-0 text-[#D4AF37]" />
+                  <span className="text-[11px] leading-tight text-[#F2D6A0]/65 sm:text-xs">
                     {item.text}
                   </span>
                 </div>

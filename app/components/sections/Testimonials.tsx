@@ -47,8 +47,6 @@ const testimonials = [
 
 const AUTO_DELAY = 4500;
 
-// Pure CSS columns: 1 on mobile, 2 on md, 3 on xl
-// JS only manages WHICH page we're on per breakpoint
 function useVisibleCount() {
   const [count, setCount] = useState(1);
 
@@ -90,7 +88,6 @@ export default function Testimonials() {
   const visibleCount = useVisibleCount();
   const totalGroups = Math.ceil(testimonials.length / visibleCount);
 
-  // Reset page when breakpoint changes
   useEffect(() => {
     setIndex(0);
   }, [visibleCount]);
@@ -103,7 +100,6 @@ export default function Testimonials() {
     [totalGroups],
   );
 
-  // Auto-advance
   useEffect(() => {
     const t = setInterval(() => {
       if (!isPaused.current) go(1);
@@ -119,7 +115,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 lg:px-16 lg:py-20"
+      className="relative overflow-hidden py-14 sm:py-16 lg:py-20"
       onMouseEnter={() => {
         isPaused.current = true;
       }}
@@ -134,10 +130,10 @@ export default function Testimonials() {
       }}
     >
       {/* Glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.03] blur-3xl sm:h-[340px] sm:w-[340px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.03] blur-3xl sm:h-[320px] sm:w-[320px]" />
 
       <div className="section-container relative z-10">
-        {/* Header */}
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +149,15 @@ export default function Testimonials() {
             <span className="h-px w-8 bg-gradient-to-r from-[#D4AF37]/70 to-transparent sm:w-10" />
           </div>
 
-          <h2 className="text-[26px] font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[44px]">
+          <h2
+            className="
+            font-semibold leading-tight text-white
+            text-[24px]
+            sm:text-[30px]
+            md:text-[36px]
+            lg:text-[42px]
+          "
+          >
             Trusted by clients across India
           </h2>
 
@@ -163,9 +167,49 @@ export default function Testimonials() {
           </p>
         </motion.div>
 
-        {/* Carousel — fixed height container prevents layout shift during transitions */}
+        {/* ── Carousel ── */}
         <div className="relative">
-          <div className="relative overflow-hidden rounded-2xl">
+          {/* Nav arrows — md+ only, positioned outside carousel */}
+          {totalGroups > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous testimonials"
+                onClick={() => go(-1)}
+                className="
+                  absolute -left-4 top-1/2 z-10 hidden -translate-y-1/2
+                  h-9 w-9 items-center justify-center
+                  rounded-full border border-white/10 bg-[#0B0B1A]/80
+                  text-[#F2D6A0]/60 backdrop-blur-sm
+                  transition-all duration-200
+                  hover:border-[#D4AF37]/30 hover:text-[#D4AF37]
+                  md:flex
+                  lg:-left-5
+                "
+              >
+                <ChevronLeft size={17} />
+              </button>
+              <button
+                type="button"
+                aria-label="Next testimonials"
+                onClick={() => go(1)}
+                className="
+                  absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2
+                  h-9 w-9 items-center justify-center
+                  rounded-full border border-white/10 bg-[#0B0B1A]/80
+                  text-[#F2D6A0]/60 backdrop-blur-sm
+                  transition-all duration-200
+                  hover:border-[#D4AF37]/30 hover:text-[#D4AF37]
+                  md:flex
+                  lg:-right-5
+                "
+              >
+                <ChevronRight size={17} />
+              </button>
+            </>
+          )}
+
+          <div className="overflow-hidden rounded-2xl">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={`${index}-${visibleCount}`}
@@ -188,8 +232,8 @@ export default function Testimonials() {
                       <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#171124]/90 p-5 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_36px_rgba(212,175,55,0.12)] sm:p-6">
                         {/* Top row */}
                         <div className="mb-4 flex items-center justify-between">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#D4AF37] sm:h-11 sm:w-11">
-                            <Quote size={18} fill="currentColor" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#D4AF37]">
+                            <Quote size={17} fill="currentColor" />
                           </div>
                           {item.highlight && (
                             <span className="rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#D4AF37]">
@@ -208,7 +252,7 @@ export default function Testimonials() {
                           {Array.from({ length: item.rating }).map((_, si) => (
                             <Star
                               key={si}
-                              size={13}
+                              size={12}
                               className="text-[#D4AF37]"
                               fill="currentColor"
                             />
@@ -217,7 +261,7 @@ export default function Testimonials() {
 
                         {/* Author */}
                         <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F2D6A0] via-[#D4AF37] to-[#B76E79] text-xs font-bold text-[#0B0B1A] sm:h-10 sm:w-10 sm:text-sm">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F2D6A0] via-[#D4AF37] to-[#B76E79] text-xs font-bold text-[#0B0B1A]">
                             {item.name[0]}
                           </div>
                           <div>
@@ -236,33 +280,11 @@ export default function Testimonials() {
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Nav arrows — visible on md+ */}
-          {totalGroups > 1 && (
-            <>
-              <button
-                type="button"
-                aria-label="Previous testimonials"
-                onClick={() => go(-1)}
-                className="absolute -left-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[#0B0B1A]/80 p-2 text-[#F2D6A0]/60 backdrop-blur-sm transition-all duration-200 hover:border-[#D4AF37]/30 hover:text-[#D4AF37] md:flex"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type="button"
-                aria-label="Next testimonials"
-                onClick={() => go(1)}
-                className="absolute -right-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[#0B0B1A]/80 p-2 text-[#F2D6A0]/60 backdrop-blur-sm transition-all duration-200 hover:border-[#D4AF37]/30 hover:text-[#D4AF37] md:flex"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </>
-          )}
         </div>
 
-        {/* Dots — also tap targets on mobile */}
+        {/* ── Dots — larger tap targets on mobile ── */}
         {totalGroups > 1 && (
-          <div className="mt-6 flex items-center justify-center gap-2 sm:mt-8">
+          <div className="mt-6 flex items-center justify-center gap-2.5 sm:mt-8">
             {Array.from({ length: totalGroups }).map((_, di) => (
               <button
                 key={di}
@@ -272,12 +294,17 @@ export default function Testimonials() {
                   setIndex(di);
                 }}
                 aria-label={`Go to group ${di + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  di === index
-                    ? "w-8 bg-[#D4AF37]"
-                    : "w-2 bg-[#F2D6A0]/25 hover:bg-[#D4AF37]/50"
-                }`}
-              />
+                /* Outer div is 28px tall for tap target, dot is visual only */
+                className="flex h-7 w-7 items-center justify-center"
+              >
+                <span
+                  className={`block rounded-full transition-all duration-300 ${
+                    di === index
+                      ? "h-2 w-8 bg-[#D4AF37]"
+                      : "h-2 w-2 bg-[#F2D6A0]/25 hover:bg-[#D4AF37]/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         )}

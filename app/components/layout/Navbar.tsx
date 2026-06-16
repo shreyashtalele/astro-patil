@@ -50,7 +50,6 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  // Close menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setMenuOpen(false);
@@ -58,8 +57,6 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const navHeight = scrolled ? "lg:h-16" : "lg:h-20";
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full">
@@ -70,9 +67,10 @@ export default function Navbar() {
             : "bg-transparent"
         }`}
       >
-        {/* Top bar */}
+        {/* ── Top bar ── */}
         <div
-          className={`section-container flex h-14 items-center justify-between sm:h-16 ${navHeight} transition-all duration-300`}
+          className={`section-container flex items-center justify-between transition-all duration-300
+            h-14 sm:h-16 ${scrolled ? "lg:h-16" : "lg:h-20"}`}
         >
           {/* Logo */}
           <a
@@ -80,10 +78,10 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="relative shrink-0"
           >
-            <h1 className="text-[13px] font-semibold tracking-[0.2em] text-[#F6DFA8] sm:text-[15px] lg:text-lg lg:tracking-[0.28em]">
+            <h1 className="text-[12px] font-semibold tracking-[0.18em] text-[#F6DFA8] min-[360px]:text-[13px] sm:text-[15px] lg:text-lg lg:tracking-[0.28em]">
               ASTROPATIL
             </h1>
-            <span className="absolute -bottom-1 left-0 h-px w-12 bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/70 to-transparent sm:w-14" />
+            <span className="absolute -bottom-1 left-0 h-px w-10 bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/70 to-transparent sm:w-14" />
           </a>
 
           {/* Desktop links */}
@@ -127,7 +125,7 @@ export default function Navbar() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#F6DFA8] transition-colors duration-200 hover:border-[#D4AF37]/30 hover:bg-white/[0.06] lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#F6DFA8] transition-colors duration-200 hover:border-[#D4AF37]/30 hover:bg-white/[0.06] active:scale-95 lg:hidden"
           >
             <AnimatePresence mode="wait" initial={false}>
               {menuOpen ? (
@@ -155,7 +153,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile drawer */}
+        {/* ── Mobile drawer ── */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -183,7 +181,7 @@ export default function Navbar() {
                         >
                           {link.label}
                           {isActive && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+                            <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
                           )}
                         </a>
                       );

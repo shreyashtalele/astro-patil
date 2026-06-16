@@ -32,19 +32,19 @@ function GlassCard({
       }}
       className={`absolute z-30 rounded-2xl border border-[#D4AF37]/35 bg-[#120b22]/60 px-3 py-2.5 shadow-[0_0_30px_rgba(212,175,55,0.15)] backdrop-blur-xl xl:px-4 xl:py-3 ${className}`}
     >
-      <div className="flex items-center gap-2.5 xl:gap-3">
+      <div className="flex items-center gap-2 xl:gap-3">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/15 text-[#FFD700] xl:h-10 xl:w-10">
           {icon}
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37] xl:text-[10px]">
             {title}
           </p>
-          <p className="mt-0.5 font-serif text-base text-white xl:text-lg">
+          <p className="mt-0.5 truncate font-serif text-sm text-white xl:text-base">
             {value}
           </p>
           {subtitle && (
-            <p className="mt-0.5 text-[10px] text-[#E8C766]/75 xl:text-[11px]">
+            <p className="mt-0.5 truncate text-[10px] text-[#E8C766]/75 xl:text-[11px]">
               {subtitle}
             </p>
           )}
@@ -56,77 +56,82 @@ function GlassCard({
 
 export default function HeroVisual() {
   return (
-    <div className="relative hidden h-[400px] w-full max-w-[540px] items-center justify-center lg:flex xl:h-[500px] xl:max-w-[640px]">
+    /*
+      Only rendered on lg+ (parent hides it below lg).
+      Size ramp: lg → 400×480px, xl → 500×580px
+    */
+    <div className="relative flex h-[420px] w-full max-w-[500px] items-center justify-center xl:h-[500px] xl:max-w-[600px]">
       {/* Glow blob */}
       <motion.div
         animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.08, 1] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute h-[320px] w-[320px] rounded-full bg-[#D4AF37]/18 blur-[80px] xl:h-[400px] xl:w-[400px]"
+        className="absolute h-[300px] w-[300px] rounded-full bg-[#D4AF37]/18 blur-[80px] xl:h-[380px] xl:w-[380px]"
       />
 
       {/* Orbit rings */}
-      <div className="absolute h-[380px] w-[380px] rounded-full border border-[#D4AF37]/10 xl:h-[460px] xl:w-[460px]" />
-      <div className="absolute h-[310px] w-[310px] rounded-full border border-[#D4AF37]/08 xl:h-[380px] xl:w-[380px]" />
+      <div className="absolute h-[360px] w-[360px] rounded-full border border-[#D4AF37]/10 xl:h-[440px] xl:w-[440px]" />
+      <div className="absolute h-[290px] w-[290px] rounded-full border border-[#D4AF37]/08 xl:h-[360px] xl:w-[360px]" />
 
-      {/* Glass cards — tighter positioning for lg screens */}
+      {/* Glass cards */}
       <GlassCard
         title="Moon Sign"
         value="Virgo"
         subtitle="Analytical • Practical"
-        icon={<Moon size={16} />}
-        className="left-0 top-10 w-[190px] xl:top-16 xl:w-[220px]"
+        icon={<Moon size={15} />}
+        className="left-0 top-8 w-[175px] xl:top-14 xl:w-[210px]"
         delay={0.2}
       />
       <GlassCard
         title="Ascendant"
         value="Leo"
         subtitle="Confident • Leader"
-        icon={<ArrowUp size={17} />}
-        className="right-0 top-20 w-[190px] xl:top-28 xl:w-[220px]"
+        icon={<ArrowUp size={15} />}
+        className="right-0 top-16 w-[175px] xl:top-24 xl:w-[210px]"
         delay={0.45}
       />
       <GlassCard
         title="Current Focus"
         value="Career Growth"
         subtitle="Jupiter Favorable"
-        icon={<TrendingUp size={16} />}
-        className="bottom-4 left-1/2 w-[230px] -translate-x-1/2 xl:bottom-8 xl:w-[260px]"
+        icon={<TrendingUp size={15} />}
+        className="bottom-6 left-1/2 w-[210px] -translate-x-1/2 xl:bottom-10 xl:w-[250px]"
         delay={0.7}
       />
 
       {/* Connector lines */}
       <svg
         className="absolute inset-0 z-10 h-full w-full"
-        viewBox="0 0 640 560"
+        viewBox="0 0 600 520"
+        preserveAspectRatio="xMidYMid meet"
       >
         <path
-          d="M160 175 C200 210, 240 230, 285 250"
+          d="M150 160 C190 200, 230 220, 275 242"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.4"
+          opacity="0.35"
         />
         <path
-          d="M480 230 C445 242, 415 252, 375 265"
+          d="M450 215 C415 228, 390 240, 355 255"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.4"
+          opacity="0.35"
         />
         <path
-          d="M320 420 C320 455, 320 480, 320 505"
+          d="M300 400 C300 430, 300 455, 300 478"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.4"
+          opacity="0.35"
         />
       </svg>
 
       {/* Star particles */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      {Array.from({ length: 18 }).map((_, i) => (
         <motion.span
           key={i}
           className="absolute z-20 h-0.5 w-0.5 rounded-full bg-[#FFD700]"
@@ -136,8 +141,8 @@ export default function HeroVisual() {
             opacity: 0.2 + (i % 4) * 0.1,
           }}
           animate={{
-            y: [0, -14, 0],
-            opacity: [0.15, 0.7, 0.15],
+            y: [0, -12, 0],
+            opacity: [0.15, 0.65, 0.15],
             scale: [1, 1.5, 1],
           }}
           transition={{
@@ -158,7 +163,7 @@ export default function HeroVisual() {
           scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
           rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="relative z-20 h-[320px] w-[320px] xl:h-[420px] xl:w-[420px]"
+        className="relative z-20 h-[300px] w-[300px] xl:h-[400px] xl:w-[400px]"
       >
         <svg viewBox="0 0 520 520" className="h-full w-full overflow-visible">
           <defs>

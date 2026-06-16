@@ -76,13 +76,13 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 lg:px-16 lg:py-20"
+      className="relative overflow-hidden py-14 sm:py-16 lg:py-20"
     >
       {/* Ambient */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_80%,rgba(212,175,55,0.04),transparent_70%)]" />
 
       <div className="section-container relative z-10">
-        {/* Header */}
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,7 +98,15 @@ export default function ContactSection() {
             <div className="h-px w-8 bg-gradient-to-r from-[#D4AF37]/60 to-transparent" />
           </div>
 
-          <h2 className="text-[26px] font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[44px]">
+          <h2
+            className="
+            font-semibold leading-tight text-white
+            text-[24px]
+            sm:text-[30px]
+            md:text-[36px]
+            lg:text-[42px]
+          "
+          >
             Start your guidance journey
           </h2>
 
@@ -108,9 +116,12 @@ export default function ContactSection() {
           </p>
         </motion.div>
 
-        {/* Two-column layout */}
-        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-7">
-          {/* Left — contact info */}
+        {/* ── Two-column layout ──
+            mobile  → single column, info on top, form below
+            lg+     → side by side [0.9fr | 1.1fr]
+        */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-7">
+          {/* ── Left — contact info ── */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -138,8 +149,12 @@ export default function ContactSection() {
                     <p className="text-[10px] uppercase tracking-widest text-[#F2D6A0]/35">
                       {item.label}
                     </p>
-                    {/* break-all ensures long email doesn't overflow on 320px screens */}
-                    <p className="mt-0.5 break-all text-sm text-[#F2D6A0]/80 sm:break-words">
+                    {/*
+                      Email: break-all on xs screens (320–479px),
+                      break-words on 480px+ — avoids overflow without
+                      breaking mid-character on wider screens
+                    */}
+                    <p className="mt-0.5 text-sm text-[#F2D6A0]/80 break-all min-[480px]:break-words">
                       {item.value}
                     </p>
                   </div>
@@ -167,7 +182,7 @@ export default function ContactSection() {
             </p>
           </motion.div>
 
-          {/* Right — form */}
+          {/* ── Right — form ── */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -180,7 +195,11 @@ export default function ContactSection() {
               noValidate
               className="flex flex-col gap-4"
             >
-              {/* Name + Phone — stacked on mobile, side-by-side on sm+ */}
+              {/*
+                Name + Phone:
+                  < 480px  → stacked (1 col)
+                  ≥ 480px  → side by side (2 col)
+              */}
               <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2">
                 <input
                   name="name"
@@ -207,7 +226,7 @@ export default function ContactSection() {
                 name="service"
                 defaultValue=""
                 aria-label="Select astrology service"
-                className={`${inputClass} bg-[#141426] appearance-none cursor-pointer`}
+                className={`${inputClass} cursor-pointer appearance-none bg-[#141426]`}
               >
                 <option value="" disabled>
                   Select a service
@@ -225,7 +244,7 @@ export default function ContactSection() {
                 rows={4}
                 placeholder="Tell us what you'd like guidance on..."
                 aria-label="Your message"
-                className={`${inputClass} resize-none min-h-[120px]`}
+                className={`${inputClass} min-h-[120px] resize-none`}
               />
 
               {/* Error */}
@@ -245,7 +264,7 @@ export default function ContactSection() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                className="w-full rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/[0.06] py-3.5 text-sm font-medium text-[#D4AF37] transition-all duration-300 hover:bg-[#D4AF37]/12 hover:border-[#D4AF37]/40 active:scale-[0.98]"
+                className="w-full rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/[0.06] py-3.5 text-sm font-medium text-[#D4AF37] transition-all duration-300 hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/12 active:scale-[0.98]"
               >
                 Send via WhatsApp →
               </motion.button>
