@@ -24,28 +24,27 @@ function GlassCard({
   return (
     <motion.div
       initial={{ opacity: 0, y: 24, scale: 0.92 }}
-      animate={{ opacity: 1, y: [0, -8, 0], scale: 1 }}
+      animate={{ opacity: 1, y: [0, -6, 0], scale: 1 }}
       transition={{
         opacity: { duration: 0.7, delay },
         scale: { duration: 0.7, delay },
         y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay },
       }}
-      className={`absolute z-30 rounded-3xl border border-[#D4AF37]/35 bg-[#120b22]/60 px-4 py-3 shadow-[0_0_40px_rgba(212,175,55,0.18)] backdrop-blur-xl xl:px-5 xl:py-4 ${className}`}
+      className={`absolute z-30 rounded-2xl border border-[#D4AF37]/35 bg-[#120b22]/60 px-3 py-2.5 shadow-[0_0_30px_rgba(212,175,55,0.15)] backdrop-blur-xl xl:px-4 xl:py-3 ${className}`}
     >
-      <div className="flex items-center gap-3 xl:gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/15 text-[#FFD700] xl:h-12 xl:w-12">
+      <div className="flex items-center gap-2.5 xl:gap-3">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/15 text-[#FFD700] xl:h-10 xl:w-10">
           {icon}
         </div>
-
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#D4AF37] xl:text-[11px]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37] xl:text-[10px]">
             {title}
           </p>
-          <p className="mt-1 font-serif text-xl text-white xl:text-2xl">
+          <p className="mt-0.5 font-serif text-base text-white xl:text-lg">
             {value}
           </p>
           {subtitle && (
-            <p className="mt-1 text-[11px] text-[#E8C766]/80 xl:text-xs">
+            <p className="mt-0.5 text-[10px] text-[#E8C766]/75 xl:text-[11px]">
               {subtitle}
             </p>
           )}
@@ -57,109 +56,109 @@ function GlassCard({
 
 export default function HeroVisual() {
   return (
-    <div className="relative hidden h-[460px] w-full max-w-[620px] items-center justify-center lg:flex xl:h-[540px] xl:max-w-[700px]">
+    <div className="relative hidden h-[400px] w-full max-w-[540px] items-center justify-center lg:flex xl:h-[500px] xl:max-w-[640px]">
+      {/* Glow blob */}
       <motion.div
-        animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }}
+        animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.08, 1] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute h-[390px] w-[390px] rounded-full bg-[#D4AF37]/20 blur-[90px] xl:h-[470px] xl:w-[470px]"
+        className="absolute h-[320px] w-[320px] rounded-full bg-[#D4AF37]/18 blur-[80px] xl:h-[400px] xl:w-[400px]"
       />
 
-      <div className="absolute h-[450px] w-[450px] rounded-full border border-[#D4AF37]/10 xl:h-[530px] xl:w-[530px]" />
+      {/* Orbit rings */}
       <div className="absolute h-[380px] w-[380px] rounded-full border border-[#D4AF37]/10 xl:h-[460px] xl:w-[460px]" />
+      <div className="absolute h-[310px] w-[310px] rounded-full border border-[#D4AF37]/08 xl:h-[380px] xl:w-[380px]" />
 
+      {/* Glass cards — tighter positioning for lg screens */}
       <GlassCard
         title="Moon Sign"
         value="Virgo"
         subtitle="Analytical • Practical"
-        icon={<Moon size={20} />}
-        className="left-0 top-14 w-[225px] xl:top-20 xl:w-[245px]"
+        icon={<Moon size={16} />}
+        className="left-0 top-10 w-[190px] xl:top-16 xl:w-[220px]"
         delay={0.2}
       />
-
       <GlassCard
         title="Ascendant"
         value="Leo"
-        subtitle="Confident • Natural Leader"
-        icon={<ArrowUp size={21} />}
-        className="right-0 top-24 w-[225px] xl:top-32 xl:w-[245px]"
+        subtitle="Confident • Leader"
+        icon={<ArrowUp size={17} />}
+        className="right-0 top-20 w-[190px] xl:top-28 xl:w-[220px]"
         delay={0.45}
       />
-
       <GlassCard
         title="Current Focus"
         value="Career Growth"
         subtitle="Jupiter Favorable"
-        icon={<TrendingUp size={20} />}
-        className="bottom-6 left-1/2 w-[265px] -translate-x-1/2 xl:bottom-10 xl:w-[285px]"
+        icon={<TrendingUp size={16} />}
+        className="bottom-4 left-1/2 w-[230px] -translate-x-1/2 xl:bottom-8 xl:w-[260px]"
         delay={0.7}
       />
 
+      {/* Connector lines */}
       <svg
         className="absolute inset-0 z-10 h-full w-full"
-        viewBox="0 0 720 620"
+        viewBox="0 0 640 560"
       >
         <path
-          d="M180 190 C220 230, 260 250, 310 270"
+          d="M160 175 C200 210, 240 230, 285 250"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.45"
+          opacity="0.4"
         />
         <path
-          d="M540 250 C500 260, 460 270, 410 290"
+          d="M480 230 C445 242, 415 252, 375 265"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.45"
+          opacity="0.4"
         />
         <path
-          d="M360 465 C360 500, 360 520, 360 545"
+          d="M320 420 C320 455, 320 480, 320 505"
           fill="none"
           stroke={GOLD}
           strokeWidth="1"
           strokeDasharray="4 8"
-          opacity="0.45"
+          opacity="0.4"
         />
       </svg>
 
-      {Array.from({ length: 28 }).map((_, i) => (
+      {/* Star particles */}
+      {Array.from({ length: 20 }).map((_, i) => (
         <motion.span
           key={i}
-          className="absolute z-20 h-1 w-1 rounded-full bg-[#FFD700]"
+          className="absolute z-20 h-0.5 w-0.5 rounded-full bg-[#FFD700]"
           style={{
             left: `${15 + ((i * 29) % 70)}%`,
             top: `${8 + ((i * 37) % 78)}%`,
-            opacity: 0.25 + (i % 4) * 0.12,
+            opacity: 0.2 + (i % 4) * 0.1,
           }}
           animate={{
-            y: [0, -18, 0],
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.6, 1],
+            y: [0, -14, 0],
+            opacity: [0.15, 0.7, 0.15],
+            scale: [1, 1.5, 1],
           }}
           transition={{
             duration: 4 + (i % 5),
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i * 0.12,
+            delay: i * 0.15,
           }}
         />
       ))}
 
+      {/* Main SVG mandala */}
       <motion.div
         initial={{ opacity: 0, scale: 0.82, rotate: -3 }}
-        animate={{
-          opacity: 1,
-          scale: [1, 1.025, 1],
-          rotate: [-1.2, 1.2, -1.2],
-        }}
+        animate={{ opacity: 1, scale: [1, 1.02, 1], rotate: [-1, 1, -1] }}
         transition={{
           opacity: { duration: 0.9 },
           scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
           rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="relative z-20 h-[380px] w-[380px] xl:h-[450px] xl:w-[450px]"
+        className="relative z-20 h-[320px] w-[320px] xl:h-[420px] xl:w-[420px]"
       >
         <svg viewBox="0 0 520 520" className="h-full w-full overflow-visible">
           <defs>
@@ -170,16 +169,14 @@ export default function HeroVisual() {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-
             <linearGradient id="premiumGold" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#D4AF37" />
               <stop offset="45%" stopColor="#FFD700" />
               <stop offset="100%" stopColor="#B76E79" />
             </linearGradient>
-
             <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#FFD700" stopOpacity="0.55" />
-              <stop offset="55%" stopColor="#D4AF37" stopOpacity="0.12" />
+              <stop offset="0%" stopColor="#FFD700" stopOpacity="0.5" />
+              <stop offset="55%" stopColor="#D4AF37" stopOpacity="0.1" />
               <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
             </radialGradient>
           </defs>
@@ -195,7 +192,7 @@ export default function HeroVisual() {
               r="235"
               fill="none"
               stroke={GOLD}
-              strokeOpacity="0.18"
+              strokeOpacity="0.15"
             />
             <circle
               cx="260"
@@ -203,7 +200,7 @@ export default function HeroVisual() {
               r="205"
               fill="none"
               stroke={GOLD}
-              strokeOpacity="0.16"
+              strokeOpacity="0.13"
               strokeDasharray="4 10"
             />
             <circle
@@ -212,7 +209,7 @@ export default function HeroVisual() {
               r="170"
               fill="none"
               stroke={GOLD}
-              strokeOpacity="0.13"
+              strokeOpacity="0.1"
             />
           </motion.g>
 
@@ -226,10 +223,9 @@ export default function HeroVisual() {
             animate={{ pathLength: 1 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
           />
-
           <motion.path
             d="M105 105 H415 V415 H105 Z"
-            fill="rgba(255,215,0,0.025)"
+            fill="rgba(255,215,0,0.02)"
             stroke={GOLD_LIGHT}
             strokeWidth="2.4"
             filter="url(#heroGoldGlow)"
@@ -252,7 +248,7 @@ export default function HeroVisual() {
               fill="none"
               stroke={GOLD_LIGHT}
               strokeWidth={i < 4 ? 1.5 : 1.2}
-              opacity={i < 4 ? 0.7 : 0.48}
+              opacity={i < 4 ? 0.65 : 0.42}
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
               transition={{ duration: 1.1, delay: 0.5 + i * 0.12 }}
@@ -260,7 +256,7 @@ export default function HeroVisual() {
           ))}
 
           <motion.g
-            animate={{ scale: [1, 1.12, 1], opacity: [0.8, 1, 0.8] }}
+            animate={{ scale: [1, 1.1, 1], opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             style={{ transformOrigin: "260px 260px" }}
           >
@@ -311,7 +307,7 @@ export default function HeroVisual() {
               textAnchor="middle"
               dominantBaseline="middle"
               fill="#FFE58A"
-              fontSize="26"
+              fontSize="24"
               fontFamily="Cinzel, Georgia, serif"
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -332,7 +328,7 @@ export default function HeroVisual() {
             <motion.g
               key={String(text)}
               initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: [1, 1.15, 1] }}
+              animate={{ opacity: 1, scale: [1, 1.12, 1] }}
               transition={{
                 opacity: { delay: 1.3 + i * 0.1 },
                 scale: {
@@ -346,9 +342,9 @@ export default function HeroVisual() {
               <circle
                 cx={x}
                 cy={y}
-                r="22"
+                r="20"
                 fill="#D4AF37"
-                opacity="0.16"
+                opacity="0.14"
                 filter="url(#heroGoldGlow)"
               />
               <text
@@ -357,7 +353,7 @@ export default function HeroVisual() {
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#FFD700"
-                fontSize="26"
+                fontSize="22"
                 fontFamily="Georgia, serif"
               >
                 {text}
@@ -379,10 +375,10 @@ export default function HeroVisual() {
               key={i}
               cx={x}
               cy={y}
-              r="6"
+              r="5"
               fill="#FFD700"
               filter="url(#heroGoldGlow)"
-              animate={{ scale: [1, 1.5, 1], opacity: [0.75, 1, 0.75] }}
+              animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
               transition={{
                 duration: 2.8,
                 repeat: Infinity,

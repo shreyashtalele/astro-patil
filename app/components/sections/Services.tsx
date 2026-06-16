@@ -74,64 +74,79 @@ const services: Service[] = [
   },
 ];
 
+const trustItems = [
+  { icon: Sparkles, text: "9+ Years Experience" },
+  { icon: Users, text: "5000+ Clients Guided" },
+  { icon: CheckCircle, text: "Root Cause Analysis" },
+  { icon: Lock, text: "100% Confidential" },
+];
+
 export default function Services() {
   return (
     <section
       id="services"
       className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-16 lg:px-16 lg:py-20"
     >
-      <div className="pointer-events-none absolute right-0 top-1/2 h-[280px] w-[280px] -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.04] blur-3xl sm:h-[350px] sm:w-[350px]" />
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute right-0 top-1/2 h-[260px] w-[260px] -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.04] blur-3xl sm:h-[340px] sm:w-[340px]" />
 
       <div className="section-container relative z-10 text-[#F2D6A0]">
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-8 text-center md:text-left"
+          className="mb-8 text-center sm:mb-10 md:text-left"
         >
           <div className="mb-4 flex items-center justify-center gap-3 md:justify-start">
             <div className="h-px w-8 bg-gradient-to-r from-[#D4AF37]/70 to-transparent" />
-            <span className="text-xs font-medium uppercase tracking-[0.22em] text-[#D4AF37]/70 sm:text-[13px]">
+            <span className="text-xs font-medium uppercase tracking-[0.22em] text-[#D4AF37]/70">
               What I Offer
             </span>
           </div>
 
-          <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight text-white sm:text-4xl md:mx-0 lg:text-[42px]">
-            Astrology services for every important life decision
+          <h2 className="mx-auto max-w-2xl text-[26px] font-semibold leading-tight text-white sm:text-3xl md:mx-0 md:text-4xl lg:text-[42px]">
+            Astrology services for every
+            <br className="hidden sm:block" /> important life decision
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+        {/* Services grid:
+            mobile  → 1 col
+            sm      → 2 col
+            lg      → 3 col (not xl — fills desktop at 1024px+)
+        */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
           {services.map((service, i) => (
             <motion.article
               key={service.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: i * 0.04 }}
-              className="group relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#171124]/80 shadow-[0_20px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/35 hover:shadow-[0_24px_70px_rgba(212,175,55,0.10)]"
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.24) }}
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#171124]/80 shadow-[0_16px_40px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/35 hover:shadow-[0_20px_60px_rgba(212,175,55,0.10)]"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0B0B1A] sm:aspect-[16/11] lg:aspect-[16/10]">
+              {/* Image */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#0B0B1A]">
                 <Image
                   src={service.image}
                   alt={service.title}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  priority={i === 0}
+                  priority={i < 3}
                 />
-
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-[#171124]" />
-                <div className="absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-[#171124] to-transparent" />
+                <div className="absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-[#171124] to-transparent" />
               </div>
 
-              <div className="relative flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6">
-                <h3 className="mb-3 text-lg font-semibold leading-snug text-white">
+              {/* Text */}
+              <div className="flex flex-1 flex-col px-4 pb-5 pt-4 sm:px-5">
+                <h3 className="mb-2 text-base font-semibold leading-snug text-white sm:text-lg">
                   {service.title}
                 </h3>
-
-                <p className="text-sm leading-6 text-[#F2D6A0]/68">
+                <p className="text-[13px] leading-6 text-[#F2D6A0]/65 sm:text-sm">
                   {service.desc}
                 </p>
               </div>
@@ -139,29 +154,26 @@ export default function Services() {
           ))}
         </div>
 
+        {/* Trust bar */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-5 backdrop-blur-md sm:px-8"
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-4 backdrop-blur-md sm:mt-10 sm:px-6 sm:py-5"
         >
-          <div className="grid grid-cols-1 gap-4 text-xs text-[#F2D6A0]/65 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icon: Sparkles, text: "9+ Years Experience" },
-              { icon: Users, text: "5000+ Clients Guided" },
-              { icon: CheckCircle, text: "Root Cause Analysis" },
-              { icon: Lock, text: "100% Confidential" },
-            ].map((item) => {
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {trustItems.map((item) => {
               const Icon = item.icon;
-
               return (
                 <div
                   key={item.text}
-                  className="flex items-center justify-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 sm:justify-start"
+                  className="flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 sm:gap-3 sm:px-4"
                 >
                   <Icon size={14} className="shrink-0 text-[#D4AF37]" />
-                  <span>{item.text}</span>
+                  <span className="text-[11px] text-[#F2D6A0]/65 sm:text-xs">
+                    {item.text}
+                  </span>
                 </div>
               );
             })}

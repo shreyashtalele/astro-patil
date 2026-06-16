@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 const testimonials = [
   {
@@ -47,78 +47,74 @@ const testimonials = [
 
 const AUTO_DELAY = 4500;
 
+// Pure CSS columns: 1 on mobile, 2 on md, 3 on xl
+// JS only manages WHICH page we're on per breakpoint
+function useVisibleCount() {
+  const [count, setCount] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth >= 1280) setCount(3);
+      else if (window.innerWidth >= 768) setCount(2);
+      else setCount(1);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return count;
+}
+
+const slideVariants: Variants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    x: dir > 0 ? 40 : -40,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.32, ease: "easeOut" },
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    x: dir > 0 ? -40 : 40,
+    transition: { duration: 0.2, ease: "easeIn" },
+  }),
+};
+
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [visibleCount, setVisibleCount] = useState(1);
   const isPaused = useRef(false);
-
-  useEffect(() => {
-    const updateVisibleCount = () => {
-      if (window.innerWidth >= 1280) {
-        setVisibleCount(3);
-      } else if (window.innerWidth >= 768) {
-        setVisibleCount(2);
-      } else {
-        setVisibleCount(1);
-      }
-    };
-
-    updateVisibleCount();
-    window.addEventListener("resize", updateVisibleCount);
-
-    return () => window.removeEventListener("resize", updateVisibleCount);
-  }, []);
-
+  const visibleCount = useVisibleCount();
   const totalGroups = Math.ceil(testimonials.length / visibleCount);
 
+  // Reset page when breakpoint changes
   useEffect(() => {
     setIndex(0);
   }, [visibleCount]);
 
-  const next = useCallback(() => {
-    setDirection(1);
-    setIndex((prev) => (prev + 1) % totalGroups);
-  }, [totalGroups]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!isPaused.current) next();
-    }, AUTO_DELAY);
-
-    return () => clearInterval(timer);
-  }, [next]);
-
-  const visibleTestimonials = useMemo(() => {
-    const start = index * visibleCount;
-    return testimonials.slice(start, start + visibleCount);
-  }, [index, visibleCount]);
-
-  const slideVariants: Variants = {
-    enter: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? 32 : -32,
-      scale: 0.98,
-    }),
-    center: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        duration: 0.35,
-        ease: "easeOut",
-      },
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      setDirection(dir);
+      setIndex((prev) => (prev + dir + totalGroups) % totalGroups);
     },
-    exit: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? -32 : 32,
-      scale: 0.98,
-      transition: {
-        duration: 0.22,
-        ease: "easeOut",
-      },
-    }),
-  };
+    [totalGroups],
+  );
+
+  // Auto-advance
+  useEffect(() => {
+    const t = setInterval(() => {
+      if (!isPaused.current) go(1);
+    }, AUTO_DELAY);
+    return () => clearInterval(t);
+  }, [go]);
+
+  const visible = testimonials.slice(
+    index * visibleCount,
+    index * visibleCount + visibleCount,
+  );
 
   return (
     <section
@@ -130,135 +126,161 @@ export default function Testimonials() {
       onMouseLeave={() => {
         isPaused.current = false;
       }}
+      onTouchStart={() => {
+        isPaused.current = true;
+      }}
+      onTouchEnd={() => {
+        isPaused.current = false;
+      }}
     >
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.035] blur-3xl sm:h-[360px] sm:w-[360px]" />
+      {/* Glow */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.03] blur-3xl sm:h-[340px] sm:w-[340px]" />
 
       <div className="section-container relative z-10">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -14 }}
+          initial={{ opacity: 0, y: -12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
-          className="mx-auto mb-8 max-w-3xl text-center lg:mb-10"
+          className="mx-auto mb-8 max-w-3xl text-center sm:mb-10"
         >
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#D4AF37]/70 sm:w-10" />
-            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]/80 sm:text-sm sm:tracking-[0.28em]">
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]/80">
               Testimonials
             </span>
             <span className="h-px w-8 bg-gradient-to-r from-[#D4AF37]/70 to-transparent sm:w-10" />
           </div>
 
-          <h2 className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-[46px]">
+          <h2 className="text-[26px] font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[44px]">
             Trusted by clients across India
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#F2D6A0]/60 sm:mt-5 sm:text-base sm:leading-7">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#F2D6A0]/55 sm:mt-4 sm:text-[15px]">
             Real experiences from clients who received clarity through Vedic
             astrology, kundli reading, vastu, numerology and remedies.
           </p>
         </motion.div>
 
-        <div className="relative overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={`${index}-${visibleCount}`}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6"
-            >
-              {visibleTestimonials.map((item, i) => (
-                <motion.article
-                  key={`${item.name}-${index}`}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.35,
-                      delay: i * 0.05,
-                    },
-                  }}
-                  whileHover={{ y: -5 }}
-                  className="h-full"
-                >
-                  <div className="relative h-full rounded-3xl bg-gradient-to-br from-[#D4AF37]/30 via-white/10 to-transparent p-px">
-                    <div className="relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#171124]/90 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_42px_rgba(212,175,55,0.14)] sm:min-h-[250px] sm:p-6">
-                      <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#D4AF37]/10 blur-3xl" />
-                      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.12),transparent_48%)]" />
-
-                      <div className="relative mb-5 flex items-center justify-between">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#D4AF37] sm:h-12 sm:w-12">
-                          <Quote size={20} fill="currentColor" />
+        {/* Carousel — fixed height container prevents layout shift during transitions */}
+        <div className="relative">
+          <div className="relative overflow-hidden rounded-2xl">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={`${index}-${visibleCount}`}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3"
+              >
+                {visible.map((item, i) => (
+                  <motion.article
+                    key={`${item.name}-${index}-${i}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.32, delay: i * 0.06 }}
+                    className="h-full"
+                  >
+                    <div className="relative h-full rounded-2xl bg-gradient-to-br from-[#D4AF37]/25 via-white/8 to-transparent p-px">
+                      <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#171124]/90 p-5 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_36px_rgba(212,175,55,0.12)] sm:p-6">
+                        {/* Top row */}
+                        <div className="mb-4 flex items-center justify-between">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#D4AF37] sm:h-11 sm:w-11">
+                            <Quote size={18} fill="currentColor" />
+                          </div>
+                          {item.highlight && (
+                            <span className="rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#D4AF37]">
+                              Featured
+                            </span>
+                          )}
                         </div>
 
-                        {item.highlight && (
-                          <span className="rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#D4AF37] sm:text-[10px]">
-                            Featured
-                          </span>
-                        )}
-                      </div>
+                        {/* Review text */}
+                        <p className="flex-1 text-[13px] leading-6 text-[#F2D6A0]/78 sm:text-sm sm:leading-7">
+                          {item.text}
+                        </p>
 
-                      <p className="relative flex-1 text-sm leading-6 text-[#F2D6A0]/80 sm:text-[15px] sm:leading-7">
-                        {item.text}
-                      </p>
-
-                      <div className="relative mt-5 flex gap-1.5">
-                        {Array.from({ length: item.rating }).map(
-                          (_, starIndex) => (
+                        {/* Stars */}
+                        <div className="mt-4 flex gap-1">
+                          {Array.from({ length: item.rating }).map((_, si) => (
                             <Star
-                              key={starIndex}
-                              size={15}
+                              key={si}
+                              size={13}
                               className="text-[#D4AF37]"
                               fill="currentColor"
                             />
-                          ),
-                        )}
-                      </div>
-
-                      <div className="relative mt-5 flex items-center gap-4 border-t border-white/10 pt-5">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F2D6A0] via-[#D4AF37] to-[#B76E79] text-sm font-bold text-[#0B0B1A] sm:h-12 sm:w-12">
-                          {item.name[0]}
+                          ))}
                         </div>
 
-                        <div>
-                          <h4 className="text-sm font-semibold text-white">
-                            {item.name}
-                          </h4>
-                          <p className="mt-1 text-xs text-[#F2D6A0]/50">
-                            {item.role}
-                          </p>
+                        {/* Author */}
+                        <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F2D6A0] via-[#D4AF37] to-[#B76E79] text-xs font-bold text-[#0B0B1A] sm:h-10 sm:w-10 sm:text-sm">
+                            {item.name[0]}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-semibold text-white">
+                              {item.name}
+                            </h4>
+                            <p className="mt-0.5 text-xs text-[#F2D6A0]/50">
+                              {item.role}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </motion.article>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+                  </motion.article>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Nav arrows — visible on md+ */}
+          {totalGroups > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous testimonials"
+                onClick={() => go(-1)}
+                className="absolute -left-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[#0B0B1A]/80 p-2 text-[#F2D6A0]/60 backdrop-blur-sm transition-all duration-200 hover:border-[#D4AF37]/30 hover:text-[#D4AF37] md:flex"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                aria-label="Next testimonials"
+                onClick={() => go(1)}
+                className="absolute -right-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[#0B0B1A]/80 p-2 text-[#F2D6A0]/60 backdrop-blur-sm transition-all duration-200 hover:border-[#D4AF37]/30 hover:text-[#D4AF37] md:flex"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </>
+          )}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-2">
-          {Array.from({ length: totalGroups }).map((_, dotIndex) => (
-            <button
-              key={dotIndex}
-              type="button"
-              onClick={() => {
-                setDirection(dotIndex > index ? 1 : -1);
-                setIndex(dotIndex);
-              }}
-              aria-label={`Go to testimonial group ${dotIndex + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                dotIndex === index
-                  ? "w-9 bg-[#D4AF37]"
-                  : "w-2 bg-[#F2D6A0]/25 hover:bg-[#D4AF37]/60"
-              }`}
-            />
-          ))}
-        </div>
+        {/* Dots — also tap targets on mobile */}
+        {totalGroups > 1 && (
+          <div className="mt-6 flex items-center justify-center gap-2 sm:mt-8">
+            {Array.from({ length: totalGroups }).map((_, di) => (
+              <button
+                key={di}
+                type="button"
+                onClick={() => {
+                  setDirection(di > index ? 1 : -1);
+                  setIndex(di);
+                }}
+                aria-label={`Go to group ${di + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  di === index
+                    ? "w-8 bg-[#D4AF37]"
+                    : "w-2 bg-[#F2D6A0]/25 hover:bg-[#D4AF37]/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

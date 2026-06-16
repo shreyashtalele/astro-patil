@@ -19,16 +19,13 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -37,52 +34,60 @@ export default function Navbar() {
   useEffect(() => {
     const sections = links
       .map((link) => document.querySelector(link.href))
-      .filter((section): section is Element => section !== null);
+      .filter((s): s is Element => s !== null);
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
-          .filter((entry) => entry.isIntersecting)
+          .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (visible) {
-          setActive(`#${visible.target.id}`);
-        }
+        if (visible) setActive(`#${visible.target.id}`);
       },
-      {
-        threshold: [0.2, 0.35, 0.5],
-        rootMargin: "-80px 0px -50% 0px",
-      },
+      { threshold: [0.2, 0.35, 0.5], rootMargin: "-80px 0px -50% 0px" },
     );
 
-    sections.forEach((section) => observer.observe(section));
-
+    sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
+
+  // Close menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const navHeight = scrolled ? "lg:h-16" : "lg:h-20";
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full">
       <nav
         className={`transition-all duration-500 ${
           scrolled || menuOpen
-            ? "bg-[#050510]/80 shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+            ? "bg-[#050510]/85 shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-xl"
             : "bg-transparent"
         }`}
       >
-        <div className="section-container flex h-16 items-center justify-between lg:h-20">
+        {/* Top bar */}
+        <div
+          className={`section-container flex h-14 items-center justify-between sm:h-16 ${navHeight} transition-all duration-300`}
+        >
+          {/* Logo */}
           <a
             href="#home"
             onClick={() => setMenuOpen(false)}
-            className="relative"
+            className="relative shrink-0"
           >
-            <h1 className="text-[15px] font-semibold tracking-[0.22em] text-[#F6DFA8] sm:text-lg lg:text-xl lg:tracking-[0.3em]">
+            <h1 className="text-[13px] font-semibold tracking-[0.2em] text-[#F6DFA8] sm:text-[15px] lg:text-lg lg:tracking-[0.28em]">
               ASTROPATIL
             </h1>
-
-            <span className="absolute -bottom-1 left-0 h-px w-14 bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/70 to-transparent sm:w-16" />
+            <span className="absolute -bottom-1 left-0 h-px w-12 bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/70 to-transparent sm:w-14" />
           </a>
 
-          <div className="hidden items-center gap-8 lg:flex">
+          {/* Desktop links */}
+          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
             {links.map((link) => (
               <a
                 key={link.href}
@@ -94,75 +99,105 @@ export default function Navbar() {
                 }`}
               >
                 {link.label}
-
                 {active === link.href && (
                   <motion.span
                     layoutId="desktop-active"
-                    className="absolute -bottom-2 left-0 h-px w-full bg-[#D4AF37]"
+                    className="absolute -bottom-1.5 left-0 h-px w-full bg-[#D4AF37]"
                   />
                 )}
               </a>
             ))}
           </div>
 
+          {/* Desktop CTA */}
           <a
             href="#contact"
-            className="group relative hidden items-center justify-center overflow-hidden rounded-full px-6 py-3 lg:flex"
+            className="group relative hidden items-center justify-center overflow-hidden rounded-full px-5 py-2.5 lg:flex xl:px-6 xl:py-3"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-[#D4AF37] via-[#F2D6A0] to-[#D4AF37]" />
             <span className="absolute inset-[1px] rounded-full bg-[#080814] transition-opacity duration-300 group-hover:opacity-0" />
-
-            <span className="relative text-xs font-bold uppercase tracking-[0.22em] text-[#F6DFA8] transition-colors duration-300 group-hover:text-[#070713]">
+            <span className="relative text-xs font-bold uppercase tracking-[0.2em] text-[#F6DFA8] transition-colors duration-300 group-hover:text-[#070713]">
               Get Guidance
             </span>
           </a>
 
+          {/* Hamburger */}
           <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#F6DFA8] lg:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#F6DFA8] transition-colors duration-200 hover:border-[#D4AF37]/30 hover:bg-white/[0.06] lg:hidden"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            <AnimatePresence mode="wait" initial={false}>
+              {menuOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <X size={18} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Menu size={18} />
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
         </div>
 
+        {/* Mobile drawer */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.22 }}
-              className="section-container max-h-[calc(100vh-64px)] overflow-y-auto pb-4 lg:hidden"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="overflow-hidden lg:hidden"
             >
-              <div className="rounded-2xl border border-[#D4AF37]/12 bg-[#050510]/95 p-4 shadow-[0_18px_45px_rgba(0,0,0,0.4)] backdrop-blur-2xl">
-                <div className="flex flex-col">
-                  {links.map((link) => {
-                    const isActive = active === link.href;
+              <div className="section-container pb-4 pt-1">
+                <div className="rounded-2xl border border-[#D4AF37]/12 bg-[#050510]/95 p-4 shadow-[0_18px_45px_rgba(0,0,0,0.4)] backdrop-blur-2xl">
+                  <nav className="flex flex-col">
+                    {links.map((link) => {
+                      const isActive = active === link.href;
+                      return (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setMenuOpen(false)}
+                          className={`flex items-center justify-between border-b border-white/[0.07] py-4 text-[15px] font-medium transition-colors duration-200 last:border-b-0 active:bg-white/[0.03] ${
+                            isActive
+                              ? "text-[#D4AF37]"
+                              : "text-[#F6DFA8]/80 hover:text-[#F6DFA8]"
+                          }`}
+                        >
+                          {link.label}
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+                          )}
+                        </a>
+                      );
+                    })}
+                  </nav>
 
-                    return (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`border-b border-white/[0.07] py-3.5 text-base font-medium transition-colors last:border-b-0 ${
-                          isActive ? "text-[#D4AF37]" : "text-[#F6DFA8]/82"
-                        }`}
-                      >
-                        {link.label}
-                      </a>
-                    );
-                  })}
+                  <a
+                    href="#contact"
+                    onClick={() => setMenuOpen(false)}
+                    className="mt-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F2D6A0] to-[#D4AF37] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-[#070713] shadow-[0_10px_30px_rgba(212,175,55,0.25)] active:scale-[0.98]"
+                  >
+                    Get Guidance
+                  </a>
                 </div>
-
-                <a
-                  href="#contact"
-                  onClick={() => setMenuOpen(false)}
-                  className="mt-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F2D6A0] to-[#D4AF37] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.22em] text-[#070713] shadow-[0_10px_30px_rgba(212,175,55,0.25)]"
-                >
-                  Get Guidance
-                </a>
               </div>
             </motion.div>
           )}
