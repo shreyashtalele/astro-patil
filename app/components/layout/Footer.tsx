@@ -53,7 +53,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.06] py-10 sm:py-12">
+    <footer className="relative overflow-hidden border-t border-white/[0.06] py-10 sm:py-12 lg:py-16">
       {/* Glow */}
       <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
         <div className="h-[100px] w-[280px] rounded-full bg-[#D4AF37]/[0.03] blur-3xl sm:w-[380px]" />

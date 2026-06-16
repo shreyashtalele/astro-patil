@@ -85,7 +85,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden py-14 sm:py-16 lg:py-20"
+      className="relative overflow-hidden py-10 sm:py-12 lg:py-16"
     >
       {/* Ambient glow */}
       <div className="pointer-events-none absolute right-0 top-1/2 h-[240px] w-[240px] -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.04] blur-3xl sm:h-[320px] sm:w-[320px]" />

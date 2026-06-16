@@ -76,7 +76,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden py-14 sm:py-16 lg:py-20"
+      className="relative overflow-hidden py-10 sm:py-12 lg:py-16"
     >
       {/* Ambient */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_80%,rgba(212,175,55,0.04),transparent_70%)]" />

@@ -14,7 +14,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden py-14 sm:py-16 md:py-20 lg:py-24"
+      className="relative overflow-hidden py-10 sm:py-12 lg:py-16"
     >
       {/* Top fade */}
       <div className="pointer-events-none absolute left-0 top-0 z-10 h-16 w-full bg-gradient-to-b from-[#0B0B1A] to-transparent" />
